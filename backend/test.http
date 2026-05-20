@@ -1,0 +1,22 @@
+### SIGNUP
+POST http://localhost:5000/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Arushi",
+  "email": "arushi@test.com",
+  "password": "123456"
+}
+
+### LOGIN
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "arushi@test.com",
+  "password": "123456"
+}
+
+### WATCHLIST (PROTECTED ROUTE)
+GET http://localhost:5000/api/watchlist
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDA3ZjExNTBhNjczZWNhZTU2YzZlZiIsImVtYWlsIjoiYXJ1c2hpQHRlc3QuY29tIiwiaWF0IjoxNzc4NDI0MjU4LCJleHAiOjE3Nzg1MTA2NTh9.EIep6DJa5pi01PZJOuFGBclOfKK_wQ4JtYqy4-9AC10

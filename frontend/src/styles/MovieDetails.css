@@ -1,0 +1,25 @@
+.movie-details {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  color: white;
+}
+
+.movie-details img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.movie-info {
+  max-width: 600px;
+}
+
+.rating {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.overview {
+  margin-top: 20px;
+  line-height: 1.6;
+}

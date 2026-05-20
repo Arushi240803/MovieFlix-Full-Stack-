@@ -1,0 +1,72 @@
+.watchlist-search {
+
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  margin: 35px 0 50px 0;
+}
+
+
+/* ================= SEARCH INPUT ================= */
+
+.watchlist-search input {
+
+  width: 600px;
+
+  max-width: 90%;
+
+  padding: 18px 28px;
+
+  border: none;
+
+  border-radius: 50px;
+
+  outline: none;
+
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.5px;
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.45);
+
+  transition: all 0.3s ease;
+}
+
+
+/* ================= PLACEHOLDER ================= */
+
+.watchlist-search input::placeholder {
+
+  color: #cfcfcf;
+
+  font-size: 16px;
+}
+
+
+/* ================= FOCUS EFFECT ================= */
+
+.watchlist-search input:focus {
+
+  transform: scale(1.03);
+
+  background: rgba(255,255,255,0.12);
+
+  box-shadow:
+    0 8px 35px rgba(229,9,20,0.45);
+}

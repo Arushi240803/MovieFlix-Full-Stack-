@@ -1,0 +1,56 @@
+const express = require("express");
+const router = express.Router();
+
+const authMiddleware = require("../middleware/authMiddleware");
+const Watchlist = require("../models/Watchlist");
+
+
+// ================= ADD MOVIE =================
+router.post("/add", authMiddleware, async (req, res) => {
+  try {
+    const { movieId, title, poster, rating } = req.body;
+
+    const newMovie = new Watchlist({
+      userId: req.user.id,
+      movieId,
+      title,
+      poster,
+      rating
+    });
+
+    await newMovie.save();
+
+    res.status(201).json({ message: "Movie added to watchlist" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ================= GET WATCHLIST =================
+router.get("/", authMiddleware, async (req, res) => {
+  try {
+    const movies = await Watchlist.find({ userId: req.user.id });
+
+    res.json(movies);
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ================= REMOVE MOVIE =================
+router.delete("/:id", authMiddleware, async (req, res) => {
+  try {
+    await Watchlist.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Movie removed" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+module.exports = router;
