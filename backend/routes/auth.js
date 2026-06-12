@@ -3,24 +3,37 @@ const router = express.Router();
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const User = require("../models/User");
+
+const authMiddleware = require("../middleware/authMiddleware");
 
 
 // ================= SIGNUP =================
 router.post("/signup", async (req, res) => {
+
   try {
+
     const { name, email, password } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+
+      return res.status(400).json({
+        message: "User already exists"
+      });
+
     }
 
     // Hash password
@@ -28,64 +41,145 @@ router.post("/signup", async (req, res) => {
 
     // Create user
     const newUser = new User({
+
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+
+      // Default mood
+      moodPreference: "Action"
+
     });
 
     await newUser.save();
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({
+      message: "User created successfully"
+    });
 
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
   }
+
 });
 
 
 // ================= LOGIN =================
 router.post("/login", async (req, res) => {
+
   try {
+
     const { email, password } = req.body;
 
     // Check if user exists
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+
+      return res.status(400).json({
+        message: "User not found"
+      });
+
     }
 
     // Check password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+
+      return res.status(400).json({
+        message: "Invalid credentials"
+      });
+
     }
 
     // Create JWT token
     const token = jwt.sign(
+
       {
         id: user._id,
         email: user.email
       },
+
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+
+      {
+        expiresIn: "1d"
+      }
+
     );
 
     // Send response
     res.status(200).json({
+
       message: "Login successful",
+
       token,
+
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        moodPreference: user.moodPreference
       }
+
     });
 
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
   }
+
+});
+
+
+// ================= UPDATE MOOD PREFERENCE =================
+router.put("/mood", authMiddleware, async (req, res) => {
+
+  try {
+
+    const { moodPreference } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+
+      req.user.id,
+
+      {
+        moodPreference: moodPreference
+      },
+
+      {
+        new: true
+      }
+
+    );
+
+    res.status(200).json({
+
+      message: "Mood preference updated",
+
+      user: updatedUser
+
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
+  }
+
 });
 
 

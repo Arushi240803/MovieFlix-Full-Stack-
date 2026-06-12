@@ -20,3 +20,13 @@ Content-Type: application/json
 ### WATCHLIST (PROTECTED ROUTE)
 GET http://localhost:5000/api/watchlist
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDA3ZjExNTBhNjczZWNhZTU2YzZlZiIsImVtYWlsIjoiYXJ1c2hpQHRlc3QuY29tIiwiaWF0IjoxNzc4NDI0MjU4LCJleHAiOjE3Nzg1MTA2NTh9.EIep6DJa5pi01PZJOuFGBclOfKK_wQ4JtYqy4-9AC10
+
+### UPDATE MOOD PREFERENCE
+
+PUT http://localhost:5000/api/auth/mood
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDA3ZjExNTBhNjczZWNhZTU2YzZlZiIsImVtYWlsIjoiYXJ1c2hpQHRlc3QuY29tIiwiaWF0IjoxNzgxMjc5NjkwLCJleHAiOjE3ODEzNjYwOTB9.udTNrf4jR7eQ5pRwisD0zfkZzXN-m-AFgaPjubANCN4
+
+{
+  "moodPreference": "Thriller"
+}
