@@ -4,6 +4,10 @@
   border-radius: 10px;
   padding: 10px;
   transition: transform 0.3s;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .movie-card:hover {
@@ -17,6 +21,8 @@
 
 .movie-card h2 {
   font-size: 18px;
+  min-height: 50px;   /* keeps titles aligned */
+  margin-top: 10px;
 }
 
 .movie-card p {
@@ -31,11 +37,12 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  margin-top: auto;   /* pushes button to bottom */
 }
 
 .remove-btn {
-
-  margin-top: 10px;
+  margin-top: auto;
 
   padding: 10px 15px;
 
@@ -54,7 +61,6 @@
 }
 
 .remove-btn:hover {
-
   background: #e50914;
 
   transform: scale(1.05);
