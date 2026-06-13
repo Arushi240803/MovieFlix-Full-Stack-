@@ -12,7 +12,7 @@ const authMiddleware = (req, res, next) => {
 
     const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
 
-    // Normalize user object (IMPORTANT FIX)
+    // STANDARDIZED USER FORMAT
     req.user = {
       id: decoded.id || decoded.userId
     };

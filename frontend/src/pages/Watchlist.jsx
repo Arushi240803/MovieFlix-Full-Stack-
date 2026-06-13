@@ -1,134 +1,67 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+const express = require("express");
+const router = express.Router();
+
+const authMiddleware = require("../middleware/authMiddleware");
+const Watchlist = require("../models/Watchlist");
 
 
-import Navbar from "../components/Navbar";
-import MovieCard from "../components/MovieCard";
+// ================= ADD MOVIE =================
+router.post("/add", authMiddleware, async (req, res) => {
+  try {
+    const { movieId, title, poster, rating } = req.body;
 
-import "../styles/Home.css";
-import "../styles/watchlist.css";
+    const userId = req.user.id;
 
-function Watchlist() {
+    console.log("ADD USER:", req.user); // DEBUG
 
-  const [movies, setMovies] = useState([]);
+    const newMovie = new Watchlist({
+      userId: userId,
+      movieId,
+      title,
+      poster,
+      rating
+    });
 
-  const [search, setSearch] = useState("");
+    await newMovie.save();
 
-  // ================= FETCH WATCHLIST =================
-  useEffect(() => {
+    res.status(201).json({ message: "Movie added to watchlist" });
 
-    const fetchWatchlist = async () => {
-
-      try {
-
-        const token =
-          localStorage.getItem("token");
-
-        const response = await axios.get(
-          "https://movieflix-full-stack-production.up.railway.app/api/watchlist",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        setMovies(response.data);
-
-      } catch (error) {
-
-        console.log(
-          "Error fetching watchlist:",
-          error
-        );
-      }
-    };
-
-    fetchWatchlist();
-
-  }, []);
-
-
-  // ================= SEARCH FILTER =================
-  const filteredMovies = movies.filter(
-    (movie) =>
-      movie.title
-        .toLowerCase()
-        .includes(search.toLowerCase())
-  );
-
-
-  return (
-    <div>
-
-      <Navbar />
-
-      <h1 className="heading">
-        My Watchlist
-      </h1>
-
-
-      {/* ================= SEARCH BAR ================= */}
-      <div className="watchlist-search">
-
-        <input
-          type="text"
-          placeholder="🔍 Browse saved movies..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-        />
-
-      </div>
-
-
-      {/* ================= MOVIES ================= */}
-      <div className="movies-container">
-
-        {
-          filteredMovies.length === 0 ? (
-
-            <h2 className="empty-watchlist">
-              🎬 No movies found
-            </h2>
-
-          ) : (
-
-            filteredMovies.map((movie) => (
-
-              <MovieCard
-  key={movie._id}
-
-  id={movie.movieId}
-
-  title={movie.title}
-
-  rating={movie.rating}
-
-  poster={movie.poster}
-
-  watchlistId={movie._id}
-
-  showButton={false}
-
-  onRemove={(id) =>
-    setMovies(
-      movies.filter(
-        (movie) => movie._id !== id
-      )
-    )
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
-/>
+});
 
-            ))
-          )
-        }
 
-      </div>
+// ================= GET WATCHLIST =================
+router.get("/", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-    </div>
-  );
-}
+    console.log("GET USER:", req.user); // DEBUG
 
-export default Watchlist;
+    const movies = await Watchlist.find({ userId });
+
+    res.json(movies);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ================= REMOVE MOVIE =================
+router.delete("/:id", authMiddleware, async (req, res) => {
+  try {
+    await Watchlist.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Movie removed" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+module.exports = router;
