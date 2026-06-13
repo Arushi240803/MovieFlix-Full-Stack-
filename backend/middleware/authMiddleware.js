@@ -12,8 +12,10 @@ const authMiddleware = (req, res, next) => {
 
     const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
 
-    // IMPORTANT: consistent structure
-    req.user = decoded;
+    // Normalize user object (IMPORTANT FIX)
+    req.user = {
+      id: decoded.id || decoded.userId
+    };
 
     next();
   } catch (error) {

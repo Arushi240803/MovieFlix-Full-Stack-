@@ -13,7 +13,7 @@ router.post("/add", authMiddleware, async (req, res) => {
     console.log("USER:", req.user); // DEBUG
 
     const newMovie = new Watchlist({
-      userId: req.user.userId,   // ✅ FIXED HERE
+      userId: req.user.id,   // ✅ FIXED
       movieId,
       title,
       poster,
@@ -35,7 +35,7 @@ router.post("/add", authMiddleware, async (req, res) => {
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const movies = await Watchlist.find({
-      userId: req.user.userId   // ✅ FIXED HERE
+      userId: req.user.id   // ✅ FIXED
     });
 
     res.json(movies);
