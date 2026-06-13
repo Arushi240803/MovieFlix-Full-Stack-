@@ -16,20 +16,20 @@ function MovieCard({
 
   const navigate = useNavigate();
 
+  const API = "https://movieflix-full-stack-production.up.railway.app";
+
   const imageUrl =
     `https://image.tmdb.org/t/p/w500${poster}`;
 
   // ================= ADD TO WATCHLIST =================
   const addToWatchlist = async (e) => {
-
     e.stopPropagation();
 
     try {
-
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/watchlist/add",
+        `${API}/api/watchlist/add`,   // ✅ FIXED
         {
           movieId: id,
           title,
@@ -46,7 +46,6 @@ function MovieCard({
       alert("Movie added to watchlist!");
 
     } catch (error) {
-
       alert(
         error.response?.data?.message ||
         "Error adding movie"
@@ -54,18 +53,15 @@ function MovieCard({
     }
   };
 
-
   // ================= REMOVE MOVIE =================
   const removeMovie = async (e) => {
-
     e.stopPropagation();
 
     try {
-
       const token = localStorage.getItem("token");
 
       await axios.delete(
-        `http://localhost:5000/api/watchlist/${watchlistId}`,
+        `${API}/api/watchlist/${watchlistId}`,   // ✅ FIXED
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -80,67 +76,44 @@ function MovieCard({
       }
 
     } catch (error) {
-
       alert("Error removing movie");
     }
   };
 
-
   return (
-
     <motion.div
-
       className="movie-card"
-
       onClick={() => navigate(`/movie/${id}`)}
-
       initial={{ opacity: 0, y: 20 }}
-
       animate={{ opacity: 1, y: 0 }}
-
       transition={{ duration: 0.3 }}
-
       whileHover={{
         scale: 1.05,
-        boxShadow:
-          "0px 10px 25px rgba(0,0,0,0.4)"
+        boxShadow: "0px 10px 25px rgba(0,0,0,0.4)"
       }}
-
       whileTap={{ scale: 0.97 }}
-
     >
-
       <img src={imageUrl} alt={title} />
-
       <h2>{title}</h2>
-
       <p>⭐ {rating}</p>
 
-
-      {/* ================= HOME PAGE BUTTON ================= */}
       {
         showButton ? (
-
           <button
             className="save-btn"
             onClick={addToWatchlist}
           >
             Add to Watchlist
           </button>
-
         ) : (
-
-          /* ================= WATCHLIST REMOVE ================= */
           <button
             className="remove-btn"
             onClick={removeMovie}
           >
             🗑 Remove
           </button>
-
         )
       }
-
     </motion.div>
   );
 }
