@@ -6,7 +6,7 @@ import MovieCard from "../components/MovieCard";
 import { searchMovies } from "../services/tmdbApi";
 
 import "../styles/Home.css";
-import "../styles/Search.css";
+import "../styles/search.css";
 
 function Search() {
 
