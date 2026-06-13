@@ -10,8 +10,10 @@ router.post("/add", authMiddleware, async (req, res) => {
   try {
     const { movieId, title, poster, rating } = req.body;
 
+    console.log("USER:", req.user); // DEBUG
+
     const newMovie = new Watchlist({
-      userId: req.user.id,
+      userId: req.user.userId,   // ✅ FIXED HERE
       movieId,
       title,
       poster,
@@ -23,6 +25,7 @@ router.post("/add", authMiddleware, async (req, res) => {
     res.status(201).json({ message: "Movie added to watchlist" });
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -31,11 +34,14 @@ router.post("/add", authMiddleware, async (req, res) => {
 // ================= GET WATCHLIST =================
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    const movies = await Watchlist.find({ userId: req.user.id });
+    const movies = await Watchlist.find({
+      userId: req.user.userId   // ✅ FIXED HERE
+    });
 
     res.json(movies);
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -49,6 +55,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     res.json({ message: "Movie removed" });
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
