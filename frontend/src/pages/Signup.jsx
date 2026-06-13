@@ -23,7 +23,7 @@ function Signup() {
     try {
 
       await axios.post(
-        "http://localhost:5000/api/auth/signup",
+         "https://movieflix-full-stack-production.up.railway.app/api/auth/signup",
         {
           name: username,
           email,

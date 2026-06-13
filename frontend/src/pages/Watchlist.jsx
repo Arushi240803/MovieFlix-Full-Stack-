@@ -25,7 +25,7 @@ function Watchlist() {
           localStorage.getItem("token");
 
         const response = await axios.get(
-          "http://localhost:5000/api/watchlist",
+          "https://movieflix-full-stack-production.up.railway.app/api/watchlist",
           {
             headers: {
               Authorization: `Bearer ${token}`
